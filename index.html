@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle Selector</title>
+    <style>
+        .slider {
+            width: 300px;
+        }
+        .radio-group {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <input type="number" id="angle-input" value="0" min="0" max="360"><br>
+    <input type="range" id="angle-slider" class="slider" min="-180" max="180" value="0">
+
+    <div class="radio-group">
+        <input type="radio" id="angle0" name="angle-radio" value="0">
+        <label for="angle0">0</label>
+
+        <input type="radio" id="angle45" name="angle-radio" value="45">
+        <label for="angle45">45</label>
+
+        <input type="radio" id="angle60" name="angle-radio" value="60">
+        <label for="angle60">60</label>
+
+        <input type="radio" id="angle90" name="angle-radio" value="90">
+        <label for="angle90">90</label>
+
+        <input type="radio" id="angle180" name="angle-radio" value="180">
+        <label for="angle180">180</label>
+    </div>
+
+    <script>
+        const angleInput = document.getElementById('angle-input');
+        const angleSlider = document.getElementById('angle-slider');
+        const radioButtons = document.querySelectorAll('input[name="angle-radio"]');
+
+        // Sync slider, text box, and radio buttons
+        function updateFromInput(value) {
+            value = Math.max(0, Math.min(360, Number(value) || 0)); 
+            angleInput.value = value;
+            angleSlider.value = value - 180; 
+
+            radioButtons.forEach(radio => {
+                radio.checked = (parseInt(radio.value, 10) === value);
+            });
+        }
+
+        // Sync slider with the text box
+        angleInput.addEventListener('input', (event) => {
+            updateFromInput(event.target.value);
+        });
+
+        // Sync text box with the slider
+        angleSlider.addEventListener('input', (event) => {
+            updateFromInput(parseInt(event.target.value, 10) + 180); 
+        });
+
+        // Sync text box and slider with radio buttons
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                if (event.target.checked) {
+                    updateFromInput(event.target.value);
+                }
+            });
+        });
+
+        // Initialize with value 0
+        updateFromInput(0);
+    </script>
+</body>
+</html>
